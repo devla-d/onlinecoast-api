@@ -1,12 +1,21 @@
 import Joi from "joi";
-import { join } from "path";
 import { AppDataSource } from "../config/db.config";
 import { User } from "../entity/User.entity";
 import { UserModel } from "../types";
+import * as dotenv from "dotenv";
+import jwt, { Secret } from "jsonwebtoken";
+import Authtoken from "../entity/Authtoken.entity";
+dotenv.config();
+
+const ACCESS_TOKEN_PRIVATE_KEY: Secret = process.env
+  .ACCESS_TOKEN_PRIVATE_KEY as Secret;
+const REFRESH_TOKEN_PRIVATE_KEY: Secret = process.env
+  .REFRESH_TOKEN_PRIVATE_KEY as Secret;
 
 class UserServices {
   public passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/;
   public userRepository = AppDataSource.getRepository(User);
+  public tokenRepository = AppDataSource.getRepository(Authtoken);
 
   async getByid(id: number) {
     const user = await User.findOne({ where: { id: id } });
@@ -87,6 +96,41 @@ class UserServices {
       iat: Joi.string(),
       exp: Joi.string(),
     });
+  };
+
+  generateTokens = async (user: User) => {
+    try {
+      const payload = {
+        id: user.id,
+        role: user.roles,
+        email: user.email,
+      };
+      const accessToken = jwt.sign(payload, ACCESS_TOKEN_PRIVATE_KEY, {
+        expiresIn: "15m",
+      });
+      const refreshToken = jwt.sign(payload, REFRESH_TOKEN_PRIVATE_KEY, {
+        expiresIn: "1d",
+      });
+
+      const authToken = await this.tokenRepository.findOne({
+        where: { user: { id: user.id } },
+      });
+      if (!authToken) {
+        const newToken = new Authtoken();
+        newToken.user = user;
+        newToken.refreshToken = refreshToken;
+
+        await this.tokenRepository.save(newToken);
+      } else {
+        authToken.refreshToken = refreshToken;
+        await this.tokenRepository.save(authToken);
+      }
+
+      return Promise.resolve({ accessToken, refreshToken });
+    } catch (err) {
+      console.log(err);
+      return Promise.reject(err);
+    }
   };
 }
 
