@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import e, { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import UserServices from "../services/User.service";
 import jwt, { Secret } from "jsonwebtoken";
@@ -86,6 +86,32 @@ export class AuthController {
       return res
         .status(201)
         .json({ muser: newUser, msg: "created successfully" });
+    });
+  };
+
+  logIN = async (req: Request, res: Response) => {
+    const { username, password } = req.body;
+    const schema = this.userServices.loginSchema();
+    const { error } = schema.validate(req.body, { abortEarly: false });
+    if (error) {
+      const errors = error.details.map((err) => err.message);
+      return res.json({ errors: errors });
+    }
+    const user = await this.userServices.userRepository.findOne({
+      where: { account_number: username },
+    });
+    if (!user)
+      return res.json({ errors: "Account Number Or Password is Invalid" });
+    const isMatch = bcrypt.compareSync(password, user.password);
+    if (!isMatch)
+      return res.json({ errors: "Account Number Or Password is Invalid" });
+    const { accessToken, refreshToken } =
+      await this.userServices.generateTokens(user);
+    return res.json({
+      msg: "Sucessfuly loggin",
+      user: user,
+      accessToken: accessToken,
+      refreshToken: refreshToken,
     });
   };
 }

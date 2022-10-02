@@ -8,8 +8,12 @@ enum Roles {
 
 @Entity()
 export class User extends BaseModel {
-  @Column()
+  @Column({ unique: true })
   email: string;
+  @Column({ unique: true, nullable: true })
+  account_number: string;
+  @Column({ default: 0 })
+  balance: number;
   @Column()
   first_name: string;
   @Column()

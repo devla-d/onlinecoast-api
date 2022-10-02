@@ -68,6 +68,7 @@ class UserServices {
     newUser.state = data.state;
     newUser.phone_number = data.password;
     newUser.next_of_kin = data.next_of_kin;
+    newUser.account_number = Math.random().toString().slice(2, 12);
 
     await this.userRepository.save(newUser);
 
@@ -131,6 +132,13 @@ class UserServices {
       console.log(err);
       return Promise.reject(err);
     }
+  };
+
+  loginSchema = () => {
+    return Joi.object().keys({
+      username: Joi.string().required(),
+      password: Joi.string().required(),
+    });
   };
 }
 

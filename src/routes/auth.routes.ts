@@ -18,4 +18,5 @@ AuthRouter.post(
   authController.createAccount
 );
 AuthRouter.get("/available-user-details", authController.availableData);
+AuthRouter.get("/sign-in", authController.logIN);
 export default AuthRouter;
