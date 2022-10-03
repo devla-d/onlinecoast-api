@@ -145,6 +145,17 @@ class UserServices {
       email: Joi.string().email().required(),
     });
   };
+  resetPasswordSchemaSecond = () => {
+    return Joi.object().keys({
+      newpassword: Joi.string().required(),
+
+      confirmnewpassword: Joi.string().required(),
+      id: Joi.string().required(),
+      email: Joi.string().email().required(),
+      iat: Joi.string(),
+      exp: Joi.string(),
+    });
+  };
 }
 
 export default UserServices;

@@ -160,10 +160,30 @@ export class AuthController {
 
   resetPasswordVerify = async (req: Request, res: Response) => {
     const { authToken } = req.body;
+
     if (!authToken) return res.status(400).json({ errors: "Token Required" });
     jwt.verify(authToken, SECRET_KEY, (err: any, user: any) => {
       if (err) return res.json({ errors: "Token Error" });
       return res.status(200).json({ user: user });
     });
+  };
+
+  resetPassword = async (req: Request, res: Response) => {
+    const { newpassword, email, id } = req.body;
+    const schema = this.userServices.resetPasswordSchemaSecond();
+    const { error } = schema.validate(req.body, { abortEarly: false });
+    if (error) {
+      const errors = error.details.map((err) => err.message);
+      return res.json({ errors: errors });
+    }
+    const user = await this.userServices.userRepository.findOne({
+      where: { id: parseInt(id), email: email },
+    });
+    if (!user) return res.status(404).json("User Not Found");
+    const salt = bcrypt.genSaltSync(10);
+    const hashPassword = bcrypt.hashSync(newpassword, salt);
+    user.password = hashPassword;
+    await this.userServices.userRepository.save(user);
+    return res.status(200).json({ msg: "password changed" });
   };
 }
