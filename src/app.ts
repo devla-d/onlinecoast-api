@@ -25,6 +25,15 @@ app.use(express.static(path.join(__dirname, "/public")));
 app.use(morgan("tiny"));
 app.use(upload());
 
+const APPKEY = process.env.APPKEY as string;
+app.use(function (req: Request, res: Response, next: NextFunction) {
+  const appkey = req.headers["x-app-key"];
+
+  if (appkey && appkey === APPKEY) {
+    return next();
+  }
+  return res.sendStatus(403);
+});
 // Router
 app.use(AuthRouter);
 app.use(UserRoutes);

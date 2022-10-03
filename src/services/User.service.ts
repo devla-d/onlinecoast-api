@@ -140,6 +140,11 @@ class UserServices {
       password: Joi.string().required(),
     });
   };
+  resetPasswordSchema = () => {
+    return Joi.object().keys({
+      email: Joi.string().email().required(),
+    });
+  };
 }
 
 export default UserServices;

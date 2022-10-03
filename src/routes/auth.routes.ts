@@ -19,4 +19,6 @@ AuthRouter.post(
 );
 AuthRouter.get("/available-user-details", authController.availableData);
 AuthRouter.post("/sign-in", authController.logIN);
+AuthRouter.post("/forgot-password", authController.forgetPassword);
+AuthRouter.post("/verify-reset-password", authController.resetPasswordVerify);
 export default AuthRouter;

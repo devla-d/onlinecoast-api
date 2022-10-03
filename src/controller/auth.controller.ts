@@ -7,6 +7,7 @@ import confirmaTionMail from "../services/confirmationEmail";
 import { UserModel } from "../types";
 import path from "path";
 import { welcomEmail } from "../services/welcomeEmail";
+import { resetPasswordtem } from "../services/resetPassword";
 
 const SRC_DIR = path.join(__dirname, "..");
 const MEDIAPATH = path.join(SRC_DIR, "public/media");
@@ -122,6 +123,47 @@ export class AuthController {
       user: user,
       accessToken: accessToken,
       refreshToken: refreshToken,
+    });
+  };
+
+  forgetPassword = async (req: Request, res: Response) => {
+    const { email } = req.body;
+    const schema = this.userServices.resetPasswordSchema();
+    const { error } = schema.validate(req.body, { abortEarly: false });
+    if (error) {
+      const errors = error.details.map((err) => err.message);
+      return res.json({ errors: errors });
+    }
+    const user = await this.userServices.userRepository.findOne({
+      where: { email: email },
+    });
+
+    if (!user)
+      return res.json({ errors: "User with this email doe's not exits" });
+    const payload = {
+      email: email,
+      id: user.id,
+    };
+    const token = jwt.sign(payload, SECRET_KEY, {
+      expiresIn: "10m",
+    });
+
+    this.senDmail.sendeMail(
+      "samuelaniekan680@gmail.com",
+      user.email,
+      "Reset your password",
+      resetPasswordtem(token)
+    );
+
+    return res.status(200).json({ msg: "Email sent successful" });
+  };
+
+  resetPasswordVerify = async (req: Request, res: Response) => {
+    const { authToken } = req.body;
+    if (!authToken) return res.status(400).json({ errors: "Token Required" });
+    jwt.verify(authToken, SECRET_KEY, (err: any, user: any) => {
+      if (err) return res.json({ errors: "Token Error" });
+      return res.status(200).json({ user: user });
     });
   };
 }
