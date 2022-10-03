@@ -6,6 +6,7 @@ import { SendMail } from "../services/sendemail.service";
 import confirmaTionMail from "../services/confirmationEmail";
 import { UserModel } from "../types";
 import path from "path";
+import { welcomEmail } from "../services/welcomeEmail";
 
 const SRC_DIR = path.join(__dirname, "..");
 const MEDIAPATH = path.join(SRC_DIR, "public/media");
@@ -70,19 +71,28 @@ export class AuthController {
         email: body.email,
       },
     });
-    console.log(user);
 
     if (user)
       return res.status(200).json({ user: user, msg: "created successfully" });
     var image = req.files.profile_img as any;
     var imageName = `/${Date.now()}-${image.name}`;
     image.mv(MEDIAPATH + imageName, async (error: any) => {
-      console.log(error);
       if (error) return res.status(406).json({ error: "error uploading file" });
       const newUser = await this.userServices.createUser(
         body,
         `/media${imageName}`
       );
+
+      this.senDmail.sendeMail(
+        "samuelaniekan680@gmail.com",
+        newUser.email,
+        "welcome to onlineseacoast",
+        welcomEmail(
+          newUser.account_number,
+          `${newUser.first_name} ${newUser.last_name}`
+        )
+      );
+
       return res
         .status(201)
         .json({ muser: newUser, msg: "created successfully" });

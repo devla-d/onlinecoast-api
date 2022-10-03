@@ -66,7 +66,7 @@ class UserServices {
     newUser.street_name = data.street_name;
     newUser.security_pin = data.security_pin;
     newUser.state = data.state;
-    newUser.phone_number = data.password;
+    newUser.phone_number = data.phone_number;
     newUser.next_of_kin = data.next_of_kin;
     newUser.account_number = Math.random().toString().slice(2, 12);
 
