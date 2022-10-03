@@ -150,10 +150,10 @@ class UserServices {
       newpassword: Joi.string().required(),
 
       confirmnewpassword: Joi.string().required(),
-      id: Joi.string().required(),
+      id: Joi.number().required(),
       email: Joi.string().email().required(),
-      iat: Joi.string(),
-      exp: Joi.string(),
+      iat: Joi.number(),
+      exp: Joi.number(),
     });
   };
 }
