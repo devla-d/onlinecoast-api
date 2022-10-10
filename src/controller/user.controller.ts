@@ -22,6 +22,7 @@ export class UserController {
     const user = req.user!;
     const card = await this.userServices.cardRepository.findOne({
       where: { user: { id: user.id } },
+      relations: { user: true },
     });
     return res.json({ card, msg: "" });
   };
