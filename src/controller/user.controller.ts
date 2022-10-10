@@ -13,4 +13,16 @@ export class UserController {
 
     return res.json({ transaction: trans, msg: "" });
   };
+  transactionS = async (req: Request, res: Response) => {
+    const user = req.user!;
+    const trans = await this.userServices.getUserTransactions(user, undefined);
+    return res.json({ transaction: trans, msg: "" });
+  };
+  debitCard = async (req: Request, res: Response) => {
+    const user = req.user!;
+    const card = await this.userServices.cardRepository.findOne({
+      where: { user: { id: user.id } },
+    });
+    return res.json({ card, msg: "" });
+  };
 }

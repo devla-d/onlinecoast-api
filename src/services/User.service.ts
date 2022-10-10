@@ -6,6 +6,8 @@ import * as dotenv from "dotenv";
 import jwt, { Secret } from "jsonwebtoken";
 import Authtoken from "../entity/Authtoken.entity";
 import Transaction from "../entity/Transaction.entity";
+import Card from "../entity/Cards.entity";
+import moment from "moment";
 dotenv.config();
 
 const ACCESS_TOKEN_PRIVATE_KEY: Secret = process.env
@@ -18,6 +20,7 @@ class UserServices {
   public userRepository = AppDataSource.getRepository(User);
   public tokenRepository = AppDataSource.getRepository(Authtoken);
   public txtRepository = AppDataSource.getRepository(Transaction);
+  public cardRepository = AppDataSource.getRepository(Card);
 
   registerSchema = () => {
     return Joi.object().keys({
@@ -65,8 +68,26 @@ class UserServices {
     newUser.account_number = Math.random().toString().slice(2, 12);
 
     await this.userRepository.save(newUser);
+    await this.createNewUserCard(newUser);
 
     return newUser;
+  };
+
+  createNewUserCard = async (user: User) => {
+    const d2 = new Date("2025");
+    const newCard = new Card();
+    newCard.user = user;
+    newCard.billing_address = `${user.street_name},${user.city}`;
+    newCard.card_number = `5${Math.random().toString().slice(2, 17.8)}`;
+    newCard.card_cvv = Math.random().toString().slice(2, 5);
+    newCard.card_name = user.first_name + " " + user.last_name;
+    newCard.card_type = "Master Card";
+    newCard.zipcode = user.zipcode;
+    newCard.expire = moment(d2).format("MM/YY");
+
+    await this.cardRepository.save(newCard);
+
+    return newCard;
   };
 
   createUserSchema = () => {
