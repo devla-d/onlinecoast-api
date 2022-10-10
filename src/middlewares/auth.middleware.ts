@@ -1,11 +1,38 @@
 import { Request, Response, NextFunction } from "express";
 import UserServices from "../services/User.service";
 
+import "dotenv/config";
+import jwt, { Secret, JwtPayload } from "jsonwebtoken";
+
+import { User } from "../entity/User.entity";
+
+const SECRET_KEY = process.env.ACCESS_TOKEN_PRIVATE_KEY as Secret;
+
 export class AuthMiddleWare {
   private userServices: UserServices;
   constructor() {
     this.userServices = new UserServices();
   }
+
+  authRequired = (req: Request, res: Response, next: NextFunction) => {
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
+
+    if (token == null) return res.sendStatus(401);
+
+    jwt.verify(token, SECRET_KEY, async (err: any, user) => {
+      if (err) return res.status(401).json({ msg: "Token Expired" });
+      const payload = user as JwtPayload;
+      const uSer = await this.userServices.userRepository.findOne({
+        where: { id: payload.id, email: payload.email },
+      });
+      if (!uSer) return res.status(400).json({ msg: "No User" });
+
+      req.user = uSer;
+
+      next();
+    });
+  };
 
   validateRegistration = async (
     req: Request,

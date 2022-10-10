@@ -12,7 +12,7 @@ export class User extends BaseModel {
   email: string;
   @Column({ unique: true, nullable: true })
   account_number: string;
-  @Column({ default: 0 })
+  @Column({ type: "numeric", default: 0 })
   balance: number;
   @Column()
   first_name: string;

@@ -8,8 +8,9 @@ export class UserController {
   }
 
   dashBoard = async (req: Request, res: Response) => {
-    const id = req.params.id;
-    const user = await this.userServices.getByid(parseInt(id));
-    return res.json(user);
+    const user = req.user!;
+    const trans = await this.userServices.getUserTransactions(user, 5);
+
+    return res.json(trans);
   };
 }

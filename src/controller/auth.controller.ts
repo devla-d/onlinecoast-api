@@ -1,4 +1,4 @@
-import e, { Request, Response } from "express";
+import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import UserServices from "../services/User.service";
 import jwt, { Secret } from "jsonwebtoken";
@@ -8,11 +8,14 @@ import { UserModel } from "../types";
 import path from "path";
 import { welcomEmail } from "../services/welcomeEmail";
 import { resetPasswordtem } from "../services/resetPassword";
+import "dotenv/config";
 
 const SRC_DIR = path.join(__dirname, "..");
 const MEDIAPATH = path.join(SRC_DIR, "public/media");
 
 const SECRET_KEY = process.env.SECRET_KEY as Secret;
+const REFRESH_TOKEN_PRIVATE_KEY: Secret = process.env
+  .REFRESH_TOKEN_PRIVATE_KEY as Secret;
 export class AuthController {
   private userServices: UserServices;
   private senDmail: SendMail;
@@ -90,7 +93,8 @@ export class AuthController {
         "welcome to onlineseacoast",
         welcomEmail(
           newUser.account_number,
-          `${newUser.first_name} ${newUser.last_name}`
+          `${newUser.first_name} ${newUser.last_name}`,
+          newUser.security_pin
         )
       );
 
@@ -185,5 +189,24 @@ export class AuthController {
     user.password = hashPassword;
     await this.userServices.userRepository.save(user);
     return res.status(200).json({ msg: "password changed" });
+  };
+
+  refreshToken = async (req: Request, res: Response) => {
+    const refreshToken = req.body.refreshToken;
+
+    if (!refreshToken) res.status(400).json({ error: "Invalid refreshToken" });
+    jwt.verify(
+      refreshToken,
+      REFRESH_TOKEN_PRIVATE_KEY,
+      (err: any, user: any) => {
+        if (err) return res.json({ errors: "Refresh Token Expired" });
+        if (user) {
+          const uSer = user;
+          const accesstoken = this.userServices.newAccessToken(uSer);
+
+          res.status(200).json({ accesstoken });
+        }
+      }
+    );
   };
 }

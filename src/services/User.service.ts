@@ -5,6 +5,7 @@ import { UserModel } from "../types";
 import * as dotenv from "dotenv";
 import jwt, { Secret } from "jsonwebtoken";
 import Authtoken from "../entity/Authtoken.entity";
+import Transaction from "../entity/Transaction.entity";
 dotenv.config();
 
 const ACCESS_TOKEN_PRIVATE_KEY: Secret = process.env
@@ -16,16 +17,7 @@ class UserServices {
   public passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/;
   public userRepository = AppDataSource.getRepository(User);
   public tokenRepository = AppDataSource.getRepository(Authtoken);
-
-  async getByid(id: number) {
-    const user = await User.findOne({ where: { id: id } });
-    return user;
-  }
-
-  async getByUsername(username: string) {
-    const user = await User.findOne({ where: { first_name: username } });
-    return user;
-  }
+  public txtRepository = AppDataSource.getRepository(Transaction);
 
   registerSchema = () => {
     return Joi.object().keys({
@@ -103,14 +95,13 @@ class UserServices {
     try {
       const payload = {
         id: user.id,
-        role: user.roles,
         email: user.email,
       };
       const accessToken = jwt.sign(payload, ACCESS_TOKEN_PRIVATE_KEY, {
-        expiresIn: "15m",
+        expiresIn: "15s",
       });
       const refreshToken = jwt.sign(payload, REFRESH_TOKEN_PRIVATE_KEY, {
-        expiresIn: "1d",
+        expiresIn: "30s",
       });
 
       const authToken = await this.tokenRepository.findOne({
@@ -132,6 +123,18 @@ class UserServices {
       console.log(err);
       return Promise.reject(err);
     }
+  };
+  newAccessToken = (user: User) => {
+    const payload = {
+      id: user.id,
+      role: user.roles,
+      email: user.email,
+    };
+    const accessToken = jwt.sign(payload, ACCESS_TOKEN_PRIVATE_KEY, {
+      expiresIn: "15s",
+    });
+
+    return accessToken;
   };
 
   loginSchema = () => {
@@ -155,6 +158,23 @@ class UserServices {
       iat: Joi.number(),
       exp: Joi.number(),
     });
+  };
+
+  getUserTransactions = async (user: User, limit: number | undefined) => {
+    if (limit) {
+      const [txt] = await this.txtRepository.findAndCount({
+        where: { user: { id: user.id } },
+        take: limit,
+      });
+
+      return txt;
+    } else {
+      const txt = await this.txtRepository.find({
+        where: { user: { id: user.id } },
+      });
+
+      return txt;
+    }
   };
 }
 

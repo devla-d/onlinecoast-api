@@ -1,4 +1,8 @@
-export const welcomEmail = (account_number: string, name: string) => {
+export const welcomEmail = (
+  account_number: string,
+  name: string,
+  security_pin: string
+) => {
   return `
   <!DOCTYPE html>
 <html>
@@ -254,6 +258,17 @@ export const welcomEmail = (account_number: string, name: string) => {
                   Your account number is
                   <strong style="color: red">${account_number}</strong>
                 </h5>
+                <h5
+                style="
+                  margin: 0 0 12px;
+                  font-size: 17px;
+                  font-weight: 400;
+                  line-height: 48px;
+                "
+              >
+                Your security pin is
+                <strong style="color: red">${security_pin}</strong>
+              </h5>
               </td>
             </tr>
             <!-- end copy -->
