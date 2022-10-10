@@ -4,8 +4,6 @@ import UserServices from "../services/User.service";
 import "dotenv/config";
 import jwt, { Secret, JwtPayload } from "jsonwebtoken";
 
-import { User } from "../entity/User.entity";
-
 const SECRET_KEY = process.env.ACCESS_TOKEN_PRIVATE_KEY as Secret;
 
 export class AuthMiddleWare {
@@ -21,7 +19,7 @@ export class AuthMiddleWare {
     if (token == null) return res.sendStatus(401);
 
     jwt.verify(token, SECRET_KEY, async (err: any, user) => {
-      if (err) return res.status(401).json({ msg: "Token Expired" });
+      if (err) return res.status(401).json({ msg: "Access Token Expired" });
       const payload = user as JwtPayload;
       const uSer = await this.userServices.userRepository.findOne({
         where: { id: payload.id, email: payload.email },

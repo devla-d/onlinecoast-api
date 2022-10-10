@@ -31,7 +31,9 @@ class UserServices {
 
   validatEmail = async (email: string) => {
     try {
-      const user = await User.findOne({ where: { email: email } });
+      const user = await this.userRepository.findOne({
+        where: { email: email },
+      });
       if (user) {
         return true;
       }
@@ -98,10 +100,10 @@ class UserServices {
         email: user.email,
       };
       const accessToken = jwt.sign(payload, ACCESS_TOKEN_PRIVATE_KEY, {
-        expiresIn: "15s",
+        expiresIn: "15m",
       });
       const refreshToken = jwt.sign(payload, REFRESH_TOKEN_PRIVATE_KEY, {
-        expiresIn: "30s",
+        expiresIn: "1d",
       });
 
       const authToken = await this.tokenRepository.findOne({
@@ -131,7 +133,7 @@ class UserServices {
       email: user.email,
     };
     const accessToken = jwt.sign(payload, ACCESS_TOKEN_PRIVATE_KEY, {
-      expiresIn: "15s",
+      expiresIn: "15m",
     });
 
     return accessToken;

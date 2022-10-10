@@ -7,6 +7,8 @@ class Transaction extends BaseModel {
   @OneToOne(() => User)
   @JoinColumn()
   user: User;
+  @Column()
+  mode: string;
 
   @Column({ type: "numeric" })
   amount: number;

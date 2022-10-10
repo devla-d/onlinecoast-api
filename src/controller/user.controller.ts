@@ -11,6 +11,6 @@ export class UserController {
     const user = req.user!;
     const trans = await this.userServices.getUserTransactions(user, 5);
 
-    return res.json(trans);
+    return res.json({ transaction: trans, msg: "" });
   };
 }
