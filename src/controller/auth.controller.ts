@@ -9,6 +9,7 @@ import path from "path";
 import { welcomEmail } from "../services/welcomeEmail";
 import { resetPasswordtem } from "../services/resetPassword";
 import "dotenv/config";
+import { CustomError } from "../services/error.service";
 
 const SRC_DIR = path.join(__dirname, "..");
 const MEDIAPATH = path.join(SRC_DIR, "public/media");
@@ -208,5 +209,46 @@ export class AuthController {
         }
       }
     );
+  };
+
+  changePassword = async (req: Request, res: Response) => {
+    const { oldpassword, newpassword } = req.body;
+    const schema = this.userServices.changePasswordSchema();
+    const { error } = schema.validate(req.body, { abortEarly: false });
+    if (error) {
+      const errors = error.details.map((err) => err.message);
+      return res.json({ errors: errors });
+    }
+
+    const user = req.user!;
+    const isMatch = bcrypt.compareSync(oldpassword, user.password);
+    if (!isMatch)
+      return res.status(400).json({ error: "Password don/'t match" });
+    const salt = bcrypt.genSaltSync(10);
+    const hashPassword = bcrypt.hashSync(newpassword, salt);
+    user.password = hashPassword;
+    await this.userServices.userRepository.save(user);
+
+    return res.status(201).json({ msg: "Password changed" });
+  };
+
+  resetPin = async (req: Request, res: Response) => {
+    console.log(req.body);
+    const { newpin, oldpin } = req.body;
+    const schema = this.userServices.resetPinSchema();
+    const { error } = schema.validate(req.body, { abortEarly: false });
+    if (error) {
+      const errors = error.details.map((err) => err.message);
+      return res.json({ errors: errors });
+    }
+    const user = req.user!;
+    if (user.security_pin != oldpin.toString())
+      return res.status(400).json({ error: "support don/'t match" });
+
+    user.security_pin = newpin;
+
+    await this.userServices.userRepository.save(user);
+
+    return res.status(201).json({ user: user, msg: "support pin changed" });
   };
 }

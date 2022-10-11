@@ -23,4 +23,14 @@ AuthRouter.post("/forgot-password", authController.forgetPassword);
 AuthRouter.post("/verify-reset-password", authController.resetPasswordVerify);
 AuthRouter.post("/reset-password", authController.resetPassword);
 AuthRouter.post("/refresh-token", authController.refreshToken);
+AuthRouter.post(
+  "/change-password",
+  authMiddleware.authRequired,
+  authController.changePassword
+);
+AuthRouter.post(
+  "/reset-support-pin/",
+  authMiddleware.authRequired,
+  authController.resetPin
+);
 export default AuthRouter;

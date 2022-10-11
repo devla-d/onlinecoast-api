@@ -173,9 +173,15 @@ class UserServices {
   };
   resetPasswordSchemaSecond = () => {
     return Joi.object().keys({
-      newpassword: Joi.string().required(),
+      newpassword: Joi.string().pattern(this.passwordRules).messages({
+        "string.pattern.base":
+          "password Require at  1 upper case letter, 1 lower case letter, 1 numeric digit.",
+      }),
 
-      confirmnewpassword: Joi.string().required(),
+      confirmnewpassword: Joi.string().pattern(this.passwordRules).messages({
+        "string.pattern.base":
+          "password Require at  1 upper case letter, 1 lower case letter, 1 numeric digit.",
+      }),
       id: Joi.number().required(),
       email: Joi.string().email().required(),
       iat: Joi.number(),
@@ -344,6 +350,28 @@ class UserServices {
     await this.txtRepository.save(newTransaction);
 
     return newTransaction;
+  };
+
+  changePasswordSchema = () => {
+    return Joi.object().keys({
+      oldpassword: Joi.string().required(),
+      newpassword: Joi.string().pattern(this.passwordRules).messages({
+        "string.pattern.base":
+          "password Require at  1 upper case letter, 1 lower case letter, 1 numeric digit.",
+      }),
+
+      confirmnewpassword: Joi.string().pattern(this.passwordRules).messages({
+        "string.pattern.base":
+          "password Require at  1 upper case letter, 1 lower case letter, 1 numeric digit.",
+      }),
+    });
+  };
+
+  resetPinSchema = () => {
+    return Joi.object().keys({
+      oldpin: Joi.string().min(4).max(4).required(),
+      newpin: Joi.string().min(4).max(4).required(),
+    });
   };
 }
 
