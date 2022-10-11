@@ -39,6 +39,7 @@
   },
   "scripts": {
     "start": "ts-node-dev src/index.ts",
+    "start:pro": "node build/src/index.js",
     "typeorm": "typeorm-ts-node-commonjs"
   }
 }

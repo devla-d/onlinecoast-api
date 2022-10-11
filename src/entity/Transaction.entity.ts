@@ -2,6 +2,12 @@ import { Entity, Column, JoinColumn, OneToOne } from "typeorm";
 import BaseModel from ".";
 import { User } from "./User.entity";
 
+export enum STATUS {
+  PENDING = "PENDING",
+  SUCCESS = "SUCCESS",
+  DECLINED = "DECLINED",
+}
+
 @Entity("transaction")
 class Transaction extends BaseModel {
   @OneToOne(() => User)
@@ -22,7 +28,7 @@ class Transaction extends BaseModel {
   @Column({ nullable: true })
   bic_code: string;
 
-  @Column()
+  @Column({ nullable: true })
   bank_name: string;
 
   @Column({ nullable: true })
@@ -45,6 +51,9 @@ class Transaction extends BaseModel {
 
   @Column({ nullable: true })
   country: string;
+
+  @Column({ type: "enum", enum: STATUS, default: STATUS.PENDING })
+  status: STATUS;
 }
 
 export default Transaction;

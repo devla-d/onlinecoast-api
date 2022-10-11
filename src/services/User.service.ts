@@ -5,7 +5,7 @@ import { UserModel } from "../types";
 import * as dotenv from "dotenv";
 import jwt, { Secret } from "jsonwebtoken";
 import Authtoken from "../entity/Authtoken.entity";
-import Transaction from "../entity/Transaction.entity";
+import Transaction, { STATUS } from "../entity/Transaction.entity";
 import Card from "../entity/Cards.entity";
 import moment from "moment";
 dotenv.config();
@@ -183,6 +183,15 @@ class UserServices {
     });
   };
 
+  tracSactionSameSchema = () => {
+    return Joi.object().keys({
+      amount: Joi.number().required(),
+      account_number: Joi.string().required(),
+      purpose: Joi.string(),
+      beneficiary: Joi.string().required(),
+    });
+  };
+
   getUserTransactions = async (user: User, limit: number | undefined) => {
     if (limit) {
       const [txt] = await this.txtRepository.findAndCount({
@@ -198,6 +207,29 @@ class UserServices {
 
       return txt;
     }
+  };
+  createSametrans = async (
+    user: User,
+    mode: "send" | "recieve",
+    { amount, account_number, purpose, beneficiary }: any,
+    status: STATUS
+  ) => {
+    const newTransaction = new Transaction();
+    newTransaction.amount = amount;
+    newTransaction.benneficiary_accnumber = account_number;
+    newTransaction.purpose = purpose;
+    newTransaction.benneficiary_name = beneficiary;
+    newTransaction.user = user;
+    newTransaction.mode = mode;
+    newTransaction.status = status;
+    if (mode == "send" && status == STATUS.SUCCESS) {
+      user.balance = user.balance - parseInt(amount);
+      await this.userRepository.save(user);
+    }
+
+    await this.txtRepository.save(newTransaction);
+
+    return newTransaction;
   };
 }
 
