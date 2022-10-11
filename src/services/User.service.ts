@@ -1,7 +1,7 @@
 import Joi from "joi";
 import { AppDataSource } from "../config/db.config";
 import { User } from "../entity/User.entity";
-import { DesTxtOtherFormData, UserModel } from "../types";
+import { DesTxtInterFormData, DesTxtOtherFormData, UserModel } from "../types";
 import * as dotenv from "dotenv";
 import jwt, { Secret } from "jsonwebtoken";
 import Authtoken from "../entity/Authtoken.entity";
@@ -187,7 +187,7 @@ class UserServices {
     return Joi.object().keys({
       amount: Joi.number().required(),
       account_number: Joi.string().required(),
-      purpose: Joi.string(),
+      purpose: Joi.string().optional().allow(""),
       beneficiary: Joi.string().required(),
     });
   };
@@ -196,14 +196,29 @@ class UserServices {
     return Joi.object().keys({
       first_name: Joi.string().required(),
       last_name: Joi.string().required(),
-      phone: Joi.string(),
-      email: Joi.string().email(),
+      phone: Joi.string().optional().allow(""),
+      email: Joi.string().email().optional().allow(""),
       ben_account_number: Joi.string().required(),
       iban_number: Joi.string().required(),
       bank_name: Joi.string().required(),
       swift_code: Joi.string().required(),
       amount: Joi.number().required(),
-      purpose: Joi.string(),
+      purpose: Joi.string().optional().allow(""),
+    });
+  };
+
+  tracSactionInterSchema = () => {
+    return Joi.object().keys({
+      first_name: Joi.string().required(),
+      last_name: Joi.string().required(),
+      city: Joi.string().optional().allow(""),
+      country: Joi.string().optional().allow(""),
+      ben_account_number: Joi.string().required(),
+      iban_number: Joi.string().required(),
+      bank_name: Joi.string().required(),
+      swift_code: Joi.string().required(),
+      amount: Joi.number().required(),
+      purpose: Joi.string().optional().allow(""),
     });
   };
 
@@ -278,6 +293,38 @@ class UserServices {
   createOthertrans = async (
     user: User,
     body: DesTxtOtherFormData,
+    status: STATUS
+  ) => {
+    const newTransaction = new Transaction();
+    newTransaction.amount = body.amount;
+    newTransaction.benneficiary_accnumber = body.iban_number;
+    newTransaction.purpose = body.purpose;
+    newTransaction.benneficiary_name = body.first_name + " " + body.last_name;
+    newTransaction.user = user;
+    newTransaction.mode = "send";
+    newTransaction.status = status;
+    if (status == STATUS.PENDING) {
+      user.balance = user.balance - body.amount;
+    }
+
+    await this.userRepository.save(user);
+
+    await this.txtRepository.save(newTransaction);
+
+    return newTransaction;
+  };
+
+  /**
+   * create transaction entity for international banks
+   *
+   * @param user
+   * @param body
+   * @param status
+   * @returns
+   */
+  createIntertrans = async (
+    user: User,
+    body: DesTxtInterFormData,
     status: STATUS
   ) => {
     const newTransaction = new Transaction();

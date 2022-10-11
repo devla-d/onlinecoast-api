@@ -26,5 +26,9 @@ UserRoutes.post(
   authRequired,
   userController.tracSactionOthers
 );
-
+UserRoutes.post(
+  "/transfer-inter",
+  authRequired,
+  userController.tracSactionInter
+);
 export default UserRoutes;

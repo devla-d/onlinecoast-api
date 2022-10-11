@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import Transaction, { STATUS } from "../entity/Transaction.entity";
 import UserServices from "../services/User.service";
-import { DesTxtOtherFormData } from "../types";
+import { DesTxtInterFormData, DesTxtOtherFormData } from "../types";
 
 export class UserController {
   private userServices: UserServices;
@@ -117,6 +117,34 @@ export class UserController {
       eRrr = true;
     }
     const senderTxt = await this.userServices.createOthertrans(
+      user,
+      boDy,
+      status
+    );
+
+    return res.status(201).json({ senderTxt, error: eRrr });
+  };
+
+  tracSactionInter = async (req: Request, res: Response) => {
+    const schema = this.userServices.tracSactionInterSchema();
+    const { error } = schema.validate(req.body, { abortEarly: false });
+    if (error) {
+      const errors = error.details.map((err) => err.message);
+      return res.status(400).json(errors);
+    }
+    let boDy = req.body as DesTxtInterFormData;
+    const user = req.user!;
+    let status: STATUS;
+    let eRrr: boolean;
+
+    if (user.balance >= boDy.amount) {
+      status = STATUS.PENDING;
+      eRrr = false;
+    } else {
+      status = STATUS.DECLINED;
+      eRrr = true;
+    }
+    const senderTxt = await this.userServices.createIntertrans(
       user,
       boDy,
       status

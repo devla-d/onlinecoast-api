@@ -30,3 +30,16 @@ export interface DesTxtOtherFormData {
   amount: number;
   purpose: string;
 }
+
+export interface DesTxtInterFormData {
+  first_name: string;
+  last_name: string;
+  city?: string;
+  country?: string;
+  ben_account_number: string;
+  iban_number: string;
+  bank_name: string;
+  swift_code: string;
+  amount: number;
+  purpose: string;
+}
