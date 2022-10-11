@@ -21,4 +21,10 @@ UserRoutes.get(
   authRequired,
   userController.transactionSdeTails
 );
+UserRoutes.post(
+  "/transfer-others",
+  authRequired,
+  userController.tracSactionOthers
+);
+
 export default UserRoutes;

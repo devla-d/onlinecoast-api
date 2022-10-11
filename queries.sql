@@ -1,1 +1,0 @@
-SELECT * FROM `onlinecoast`.`transaction` LIMIT 1000;

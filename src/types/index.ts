@@ -17,3 +17,16 @@ export interface UserModel {
   account_type: string;
   profile_img: any;
 }
+
+export interface DesTxtOtherFormData {
+  first_name: string;
+  last_name: string;
+  phone: string;
+  email: string;
+  ben_account_number: string;
+  iban_number: string;
+  bank_name: string;
+  swift_code: string;
+  amount: number;
+  purpose: string;
+}

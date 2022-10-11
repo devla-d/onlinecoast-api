@@ -1,7 +1,7 @@
 import Joi from "joi";
 import { AppDataSource } from "../config/db.config";
 import { User } from "../entity/User.entity";
-import { UserModel } from "../types";
+import { DesTxtOtherFormData, UserModel } from "../types";
 import * as dotenv from "dotenv";
 import jwt, { Secret } from "jsonwebtoken";
 import Authtoken from "../entity/Authtoken.entity";
@@ -192,6 +192,21 @@ class UserServices {
     });
   };
 
+  tracSactionOtherSchema = () => {
+    return Joi.object().keys({
+      first_name: Joi.string().required(),
+      last_name: Joi.string().required(),
+      phone: Joi.string(),
+      email: Joi.string().email(),
+      ben_account_number: Joi.string().required(),
+      iban_number: Joi.string().required(),
+      bank_name: Joi.string().required(),
+      swift_code: Joi.string().required(),
+      amount: Joi.number().required(),
+      purpose: Joi.string(),
+    });
+  };
+
   getUserTransactions = async (user: User, limit: number | undefined) => {
     if (limit) {
       const [txt] = await this.txtRepository.findAndCount({
@@ -208,6 +223,15 @@ class UserServices {
       return txt;
     }
   };
+  /**
+   * create transaction entity for the same bank
+   *
+   * @param user
+   * @param mode
+   * @param param2
+   * @param status
+   * @returns
+   */
   createSametrans = async (
     user: User,
     mode: "send" | "recieve",
@@ -224,8 +248,42 @@ class UserServices {
     newTransaction.status = status;
     if (mode == "send" && status == STATUS.SUCCESS) {
       user.balance = user.balance - parseInt(amount);
-      await this.userRepository.save(user);
     }
+    if (mode == "recieve" && status == STATUS.SUCCESS) {
+      user.balance += parseInt(amount);
+    }
+    await this.userRepository.save(user);
+
+    await this.txtRepository.save(newTransaction);
+
+    return newTransaction;
+  };
+  /**
+   * create transaction entity for other banks
+   *
+   * @param user
+   * @param body
+   * @param status
+   * @returns
+   */
+  createOthertrans = async (
+    user: User,
+    body: DesTxtOtherFormData,
+    status: STATUS
+  ) => {
+    const newTransaction = new Transaction();
+    newTransaction.amount = body.amount;
+    newTransaction.benneficiary_accnumber = body.iban_number;
+    newTransaction.purpose = body.purpose;
+    newTransaction.benneficiary_name = body.first_name + " " + body.last_name;
+    newTransaction.user = user;
+    newTransaction.mode = "send";
+    newTransaction.status = status;
+    if (status == STATUS.PENDING) {
+      user.balance = user.balance - body.amount;
+    }
+
+    await this.userRepository.save(user);
 
     await this.txtRepository.save(newTransaction);
 

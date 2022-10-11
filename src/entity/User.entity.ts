@@ -1,5 +1,6 @@
-import { Entity, Column } from "typeorm";
+import { Entity, Column, OneToMany } from "typeorm";
 import BaseModel from ".";
+import Transaction from "./Transaction.entity";
 
 enum Roles {
   ADMIN = "admin",
@@ -51,4 +52,7 @@ export class User extends BaseModel {
 
   @Column()
   password: string;
+
+  @OneToMany(() => Transaction, (transactions) => transactions.user)
+  transactions: Transaction[];
 }

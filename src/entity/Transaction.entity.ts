@@ -1,4 +1,4 @@
-import { Entity, Column, JoinColumn, OneToOne } from "typeorm";
+import { Entity, Column, JoinColumn, ManyToOne } from "typeorm";
 import BaseModel from ".";
 import { User } from "./User.entity";
 
@@ -10,7 +10,7 @@ export enum STATUS {
 
 @Entity("transaction")
 class Transaction extends BaseModel {
-  @OneToOne(() => User)
+  @ManyToOne(() => User, (user) => user.transactions)
   @JoinColumn()
   user: User;
   @Column()
