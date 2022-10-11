@@ -19,6 +19,15 @@ export class UserController {
     const trans = await this.userServices.getUserTransactions(user, undefined);
     return res.json({ transaction: trans, msg: "" });
   };
+  transactionSdeTails = async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    const trx = await this.userServices.txtRepository.findOne({
+      where: { id: parseInt(id) },
+    });
+    if (trx) return res.status(200).json({ transaction: trx });
+    else return res.status(404).json("transaction not found");
+  };
   debitCard = async (req: Request, res: Response) => {
     const user = req.user!;
     const card = await this.userServices.cardRepository.findOne({
@@ -59,7 +68,7 @@ export class UserController {
     const reciever = await this.userServices.userRepository.findOne({
       where: { account_number: account_number },
     });
-    console.log(sender, reciever);
+
     let status: STATUS;
     let eRrr: boolean;
     if (!reciever) return res.status(404).json("user not found");

@@ -16,5 +16,9 @@ UserRoutes.post(
 );
 UserRoutes.get("/account-numbers", authRequired, userController.AccNumbers);
 UserRoutes.post("/transfer-same", authRequired, userController.tracSactionSame);
-
+UserRoutes.get(
+  "/transaction/:id",
+  authRequired,
+  userController.transactionSdeTails
+);
 export default UserRoutes;
