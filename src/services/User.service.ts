@@ -212,13 +212,22 @@ class UserServices {
       const [txt] = await this.txtRepository.findAndCount({
         where: { user: { id: user.id } },
         take: limit,
+        order: {
+          createdAt: "DESC",
+        },
       });
 
       return txt;
     } else {
-      const txt = await this.txtRepository.find({
-        where: { user: { id: user.id } },
-      });
+      // const txt = await this.txtRepository.find({
+      //   where: { user: { id: user.id } },order:,
+      // });
+
+      const txt = await this.txtRepository
+        .createQueryBuilder("transaction")
+        .where("transaction.user.id = :id", { id: user.id })
+        .orderBy("createdAt", "DESC")
+        .getMany();
 
       return txt;
     }
