@@ -74,7 +74,7 @@ export class UserController {
     let eRrr: boolean;
     if (!reciever) return res.status(404).json("user not found");
     if (sender.balance >= parseInt(amount)) {
-      status = STATUS.SUCCESS;
+      status = STATUS.PENDING;
       eRrr = false;
     } else {
       status = STATUS.DECLINED;
