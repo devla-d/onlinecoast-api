@@ -8,6 +8,7 @@ import morgan from "morgan";
 import AuthRouter from "./routes/auth.routes";
 import handleError from "./middlewares/error-handler.middleware";
 import UserRoutes from "./routes/user.routes";
+import AdminRoutes from "./routes/admin.routes";
 dotenv.config();
 
 const app = express();
@@ -37,6 +38,7 @@ app.use(function (req: Request, res: Response, next: NextFunction) {
 // Router
 app.use(AuthRouter);
 app.use(UserRoutes);
+app.use("/admin", AdminRoutes);
 app.use(function (req: Request, res: Response, next: NextFunction) {
   res.status(404).json({ url: req.originalUrl + " not found" });
   next();

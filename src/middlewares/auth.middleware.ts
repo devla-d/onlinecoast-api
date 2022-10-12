@@ -3,6 +3,7 @@ import UserServices from "../services/User.service";
 
 import "dotenv/config";
 import jwt, { Secret, JwtPayload } from "jsonwebtoken";
+import { Roles } from "../entity/User.entity";
 
 const SECRET_KEY = process.env.ACCESS_TOKEN_PRIVATE_KEY as Secret;
 
@@ -25,6 +26,28 @@ export class AuthMiddleWare {
         where: { id: payload.id, email: payload.email },
       });
       if (!uSer) return res.status(400).json({ msg: "No User" });
+
+      req.user = uSer;
+
+      next();
+    });
+  };
+
+  adminRequired = (req: Request, res: Response, next: NextFunction) => {
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
+
+    if (token == null) return res.sendStatus(401);
+
+    jwt.verify(token, SECRET_KEY, async (err: any, user) => {
+      if (err) return res.status(401).json({ msg: "Access Token Expired" });
+      const payload = user as JwtPayload;
+      const uSer = await this.userServices.userRepository.findOne({
+        where: { id: payload.id, email: payload.email },
+      });
+      if (!uSer) return res.status(400).json({ msg: "No User" });
+      if (uSer.roles != Roles.ADMIN)
+        return res.status(406).json({ msg: " User not allowed" });
 
       req.user = uSer;
 

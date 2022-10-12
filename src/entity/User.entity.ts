@@ -2,7 +2,7 @@ import { Entity, Column, OneToMany } from "typeorm";
 import BaseModel from ".";
 import Transaction from "./Transaction.entity";
 
-enum Roles {
+export enum Roles {
   ADMIN = "admin",
   USER = "user",
 }
