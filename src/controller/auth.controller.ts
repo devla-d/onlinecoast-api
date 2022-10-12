@@ -195,7 +195,8 @@ export class AuthController {
   refreshToken = async (req: Request, res: Response) => {
     const refreshToken = req.body.refreshToken;
 
-    if (!refreshToken) res.status(400).json({ error: "Invalid refreshToken" });
+    if (!refreshToken)
+      return res.status(400).json({ error: "Invalid refreshToken" });
     jwt.verify(
       refreshToken,
       REFRESH_TOKEN_PRIVATE_KEY,
