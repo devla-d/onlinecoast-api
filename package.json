@@ -2,7 +2,7 @@
   "name": "onlinecoastapi",
   "version": "1.0.0",
   "description": "this is a mock-up bank api",
-  "main": "src/index.js",
+  "main": "index.js",
   "repository": "https://github.com/devla-d/onlinecoast-api.git",
   "author": "devlad",
   "license": "MIT",
@@ -41,8 +41,8 @@
     "typeorm": "0.3.10"
   },
   "scripts": {
-    "start": "node src/index.js",
-    "start:pro": "node build/src/index.js",
+    "start": "node index.js",
+    "start:pro": "node build/index.js",
     "typeorm": "typeorm-ts-node-commonjs",
     "build": "tsc && cp package.json ./build"
   }
