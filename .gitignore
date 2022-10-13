@@ -1,0 +1,9 @@
+.idea/
+.vscode/
+node_modules/
+
+tmp/
+temp/
+.env
+*/**/media/
+.sql
