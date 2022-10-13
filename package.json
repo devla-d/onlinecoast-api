@@ -41,7 +41,7 @@
     "typeorm": "0.3.10"
   },
   "scripts": {
-    "start": "ts-node-dev src/index.ts",
+    "start": "node src/index.js",
     "start:pro": "node build/src/index.js",
     "typeorm": "typeorm-ts-node-commonjs",
     "build": "tsc && cp package.json ./build"
