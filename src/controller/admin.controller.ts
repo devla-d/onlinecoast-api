@@ -1,19 +1,22 @@
 import { Request, Response } from "express";
 import NodeCache from "node-cache";
 import { STATUS } from "../entity/Transaction.entity";
+import { SendMail } from "../services/sendemail.service";
+import topUpNotify from "../services/topUpnotify";
 import UserServices from "../services/User.service";
 
 const cache = new NodeCache({ stdTTL: 15 });
 
 export default class AdminController {
   private userServices: UserServices;
+  private senDmail: SendMail;
+
   constructor() {
     this.userServices = new UserServices();
+    this.senDmail = new SendMail();
   }
 
   dashbaord = async (req: Request, res: Response) => {
-    const admin = req.user!;
-
     const [, trxCount] = await this.userServices.txtRepository.findAndCount();
     const [user, userCount] =
       await this.userServices.userRepository.findAndCount();
@@ -27,7 +30,7 @@ export default class AdminController {
       });
     let totalBalance = 0;
     user.forEach((us) => {
-      totalBalance += +us.balance;
+      totalBalance = Number(totalBalance) + Number(us.balance);
     });
 
     return res.json({
@@ -76,5 +79,36 @@ export default class AdminController {
       console.log(error);
       return res.status(500).json("Internal server error");
     }
+  };
+
+  topUpUser = async (req: Request, res: Response) => {
+    const { id, amount } = req.body;
+    const schema = this.userServices.topupSchema();
+    const { error } = schema.validate(req.body, { abortEarly: false });
+    if (error) {
+      const errors = error.details.map((err) => err.message);
+      return res.status(400).json(errors);
+    }
+
+    const user = await this.userServices.userRepository.findOne({
+      where: { id: id },
+    });
+    if (!user) return res.status(404).json("user not found");
+    user.balance = Number(user.balance) + Number(amount);
+    await this.userServices.userRepository.save(user);
+    let context = {
+      first_name: user.first_name,
+      last_name: user.last_name,
+      invoiceRef: this.userServices.makeid(10),
+      amount: amount,
+      createdAt: new Date(),
+    };
+    this.senDmail.sendeMail(
+      "samuelaniekan680@gmail.com",
+      user.email,
+      "Account Credited",
+      topUpNotify(context, "Credited")
+    );
+    return res.json({ msg: "Account balance added", user });
   };
 }

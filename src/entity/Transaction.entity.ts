@@ -16,6 +16,9 @@ class Transaction extends BaseModel {
   @Column()
   mode: string;
 
+  @Column({ nullable: true })
+  invoiceRef: string;
+
   @Column({ type: "numeric" })
   amount: number;
 

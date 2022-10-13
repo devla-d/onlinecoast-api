@@ -276,11 +276,12 @@ class UserServices {
     newTransaction.user = user;
     newTransaction.mode = mode;
     newTransaction.status = status;
+    newTransaction.invoiceRef = this.makeid(10);
     if (mode == "send" && status == STATUS.SUCCESS) {
-      user.balance = user.balance - parseInt(amount);
+      user.balance = Number(user.balance) - Number(amount);
     }
     if (mode == "recieve" && status == STATUS.SUCCESS) {
-      user.balance += parseInt(amount);
+      user.balance = Number(user.balance) + Number(amount);
     }
     await this.userRepository.save(user);
 
@@ -309,8 +310,9 @@ class UserServices {
     newTransaction.user = user;
     newTransaction.mode = "send";
     newTransaction.status = status;
+    newTransaction.invoiceRef = this.makeid(10);
     if (status == STATUS.PENDING) {
-      user.balance = user.balance - body.amount;
+      user.balance = Number(user.balance) - Number(body.amount);
     }
 
     await this.userRepository.save(user);
@@ -341,8 +343,9 @@ class UserServices {
     newTransaction.user = user;
     newTransaction.mode = "send";
     newTransaction.status = status;
+    newTransaction.invoiceRef = this.makeid(10);
     if (status == STATUS.PENDING) {
-      user.balance = user.balance - body.amount;
+      user.balance = Number(user.balance) - Number(body.amount);
     }
 
     await this.userRepository.save(user);
@@ -371,6 +374,22 @@ class UserServices {
     return Joi.object().keys({
       oldpin: Joi.string().min(4).max(4).required(),
       newpin: Joi.string().min(4).max(4).required(),
+    });
+  };
+  makeid(length: number) {
+    var result = "";
+    var characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  }
+  topupSchema = () => {
+    return Joi.object().keys({
+      amount: Joi.number().required(),
+      id: Joi.number().required(),
     });
   };
 }
