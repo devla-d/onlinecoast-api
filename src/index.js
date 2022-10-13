@@ -10,9 +10,7 @@ const db_config_1 = require("./config/db.config");
 db_config_1.AppDataSource.initialize()
   .then(() => {
     // console.log("Here you can setup and run express / fastify / any other framework.");
-    app_1.default.listen(3030, () => {
-      console.log("Listening to port 3030");
-    });
+    app_1.default.listen();
   })
   .catch((error) => console.log(error));
 //# sourceMappingURL=index.js.map
