@@ -7,3 +7,4 @@ temp/
 .env
 */**/media/
 .sql
+ .well-known/
