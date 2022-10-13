@@ -278,13 +278,13 @@ class UserServices {
     newTransaction.mode = mode;
     newTransaction.status = status;
     newTransaction.invoiceRef = this.makeid(10);
-    if (mode == "send" && status == STATUS.SUCCESS && reciever) {
+    if (mode == "send" && reciever) {
       user.balance = Number(user.balance) - Number(amount);
       newTransaction.reciever_id = reciever.id;
     }
-    if (mode == "recieve" && status == STATUS.SUCCESS) {
-      user.balance = Number(user.balance) + Number(amount);
-    }
+    // if (mode == "recieve" && status == STATUS.SUCCESS) {
+    //   user.balance = Number(user.balance) + Number(amount);
+    // }
     await this.userRepository.save(user);
 
     await this.txtRepository.save(newTransaction);

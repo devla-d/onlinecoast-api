@@ -167,11 +167,13 @@ export default class AdminController {
       transaction.status = STATUS.SUCCESS;
       if (transaction.reciever_id) {
         const reciever = await this.userServices.userRepository.findOne({
-          where: { id: Number(transaction.reciever_id) },
+          where: { id: transaction.reciever_id },
         });
+
         if (reciever) {
           reciever.balance =
             Number(reciever.balance) + Number(transaction.amount);
+          await this.userServices.userRepository.save(reciever);
         }
       }
     } else if (stat === "declined") {
