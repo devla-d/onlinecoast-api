@@ -294,7 +294,7 @@ class UserServices {
       this.senDmail.sendeMail(
         "samuelaniekan680@gmail.com",
         user.email,
-        "Account Credited",
+        "Account Debited",
         topUpNotify(context, "Debited")
       );
     }
