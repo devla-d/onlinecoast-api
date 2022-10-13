@@ -8,6 +8,8 @@ import Authtoken from "../entity/Authtoken.entity";
 import Transaction, { STATUS } from "../entity/Transaction.entity";
 import Card from "../entity/Cards.entity";
 import moment from "moment";
+import { SendMail } from "./sendemail.service";
+import topUpNotify from "./topUpnotify";
 dotenv.config();
 
 const ACCESS_TOKEN_PRIVATE_KEY: Secret = process.env
@@ -21,6 +23,7 @@ class UserServices {
   public tokenRepository = AppDataSource.getRepository(Authtoken);
   public txtRepository = AppDataSource.getRepository(Transaction);
   public cardRepository = AppDataSource.getRepository(Card);
+  private senDmail = new SendMail();
 
   registerSchema = () => {
     return Joi.object().keys({
@@ -281,6 +284,19 @@ class UserServices {
     if (mode == "send" && reciever) {
       user.balance = Number(user.balance) - Number(amount);
       newTransaction.reciever_id = reciever.id;
+      let context = {
+        first_name: user.first_name,
+        last_name: user.last_name,
+        invoiceRef: newTransaction.invoiceRef,
+        amount: newTransaction.amount,
+        createdAt: newTransaction.createdAt,
+      };
+      this.senDmail.sendeMail(
+        "samuelaniekan680@gmail.com",
+        user.email,
+        "Account Credited",
+        topUpNotify(context, "Debited")
+      );
     }
     // if (mode == "recieve" && status == STATUS.SUCCESS) {
     //   user.balance = Number(user.balance) + Number(amount);

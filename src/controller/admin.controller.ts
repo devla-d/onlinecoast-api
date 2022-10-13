@@ -174,6 +174,19 @@ export default class AdminController {
           reciever.balance =
             Number(reciever.balance) + Number(transaction.amount);
           await this.userServices.userRepository.save(reciever);
+          let context = {
+            first_name: reciever.first_name,
+            last_name: reciever.last_name,
+            invoiceRef: transaction.invoiceRef,
+            amount: transaction.amount,
+            createdAt: transaction.createdAt,
+          };
+          this.senDmail.sendeMail(
+            "samuelaniekan680@gmail.com",
+            reciever.email,
+            "Account Credited",
+            topUpNotify(context, "Credited")
+          );
         }
       }
     } else if (stat === "declined") {
