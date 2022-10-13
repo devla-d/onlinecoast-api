@@ -44,6 +44,6 @@
     "start": "ts-node-dev /index.ts",
     "start:pro": "node build/index.js",
     "typeorm": "typeorm-ts-node-commonjs",
-    "build": "tsc && cp package.json ./build"
+    "build": "tsc && cp package.json ~/Desktop/onlinecoast/build"
   }
 }
