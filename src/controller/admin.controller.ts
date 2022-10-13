@@ -129,4 +129,13 @@ export default class AdminController {
 
     return res.status(201).json({ user, msg: "user Updated" });
   };
+
+  allTransactions = async (req: Request, res: Response) => {
+    const transactions = await this.userServices.txtRepository.find({
+      relations: {
+        user: true,
+      },
+    });
+    return res.status(200).json({ transactions });
+  };
 }
