@@ -165,6 +165,15 @@ export default class AdminController {
 
     if (stat === "approved") {
       transaction.status = STATUS.SUCCESS;
+      if (transaction.reciever_id) {
+        const reciever = await this.userServices.userRepository.findOne({
+          where: { id: Number(transaction.reciever_id) },
+        });
+        if (reciever) {
+          reciever.balance =
+            Number(reciever.balance) + Number(transaction.amount);
+        }
+      }
     } else if (stat === "declined") {
       transaction.status = STATUS.DECLINED;
     } else {

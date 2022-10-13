@@ -266,7 +266,8 @@ class UserServices {
     user: User,
     mode: "send" | "recieve",
     { amount, account_number, purpose, beneficiary }: any,
-    status: STATUS
+    status: STATUS,
+    reciever: User | undefined
   ) => {
     const newTransaction = new Transaction();
     newTransaction.amount = amount;
@@ -277,8 +278,9 @@ class UserServices {
     newTransaction.mode = mode;
     newTransaction.status = status;
     newTransaction.invoiceRef = this.makeid(10);
-    if (mode == "send" && status == STATUS.SUCCESS) {
+    if (mode == "send" && status == STATUS.SUCCESS && reciever) {
       user.balance = Number(user.balance) - Number(amount);
+      newTransaction.reciever_id = reciever.id;
     }
     if (mode == "recieve" && status == STATUS.SUCCESS) {
       user.balance = Number(user.balance) + Number(amount);

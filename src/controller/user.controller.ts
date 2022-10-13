@@ -85,13 +85,15 @@ export class UserController {
       sender,
       "send",
       req.body,
-      status
+      status,
+      reciever
     );
     await this.userServices.createSametrans(
       reciever,
       "recieve",
       req.body,
-      status
+      status,
+      undefined
     );
 
     return res.status(201).json({ senderTxt, error: eRrr });
