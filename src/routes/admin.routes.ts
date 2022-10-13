@@ -10,6 +10,7 @@ const {
   topUpUser,
   editUser,
   allTransactions,
+  singleTransactions,
 } = new AdminController();
 const { adminRequired } = new AuthMiddleWare();
 
@@ -19,5 +20,6 @@ AdminRoutes.get("/all-users/:id", adminRequired, singleUser);
 AdminRoutes.post("/topup-user", adminRequired, topUpUser);
 AdminRoutes.post("/edit-user", adminRequired, editUser);
 AdminRoutes.get("/all-transactions", adminRequired, allTransactions);
+AdminRoutes.get("/all-transactions/:id", adminRequired, singleTransactions);
 
 export default AdminRoutes;

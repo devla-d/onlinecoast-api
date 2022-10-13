@@ -135,7 +135,21 @@ export default class AdminController {
       relations: {
         user: true,
       },
+      order: {
+        createdAt: "DESC",
+      },
     });
     return res.status(200).json({ transactions });
+  };
+
+  singleTransactions = async (req: Request, res: Response) => {
+    const { id } = req.body.params;
+    const transaction = await this.userServices.txtRepository.findOne({
+      where: { user: { id: parseInt(id) } },
+      relations: {
+        user: true,
+      },
+    });
+    return res.status(200).json({ transaction });
   };
 }
