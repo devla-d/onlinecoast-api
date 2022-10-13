@@ -143,13 +143,38 @@ export default class AdminController {
   };
 
   singleTransactions = async (req: Request, res: Response) => {
-    const { id } = req.body.params;
+    const { id } = req.params;
     const transaction = await this.userServices.txtRepository.findOne({
-      where: { user: { id: parseInt(id) } },
+      where: { id: parseInt(id) },
       relations: {
         user: true,
       },
     });
+
     return res.status(200).json({ transaction });
+  };
+
+  editTransaction = async (req: Request, res: Response) => {
+    const { stat, id } = req.body;
+    if (!stat || !id) return res.status(400).json("Not found");
+    const transaction = await this.userServices.txtRepository.findOne({
+      where: { id: parseInt(id) },
+      relations: { user: true },
+    });
+    if (!transaction) return res.status(404).json("Transaction not found");
+
+    if (stat === "approved") {
+      transaction.status = STATUS.SUCCESS;
+    } else if (stat === "declined") {
+      transaction.status = STATUS.DECLINED;
+    } else {
+      transaction.status = STATUS.PENDING;
+    }
+
+    await this.userServices.txtRepository.save(transaction);
+
+    return res
+      .status(201)
+      .json({ transaction, msg: `Transaction ${transaction.status}` });
   };
 }
