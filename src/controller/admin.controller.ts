@@ -5,8 +5,6 @@ import { SendMail } from "../services/sendemail.service";
 import topUpNotify from "../services/topUpnotify";
 import UserServices from "../services/User.service";
 
-const cache = new NodeCache({ stdTTL: 15 });
-
 export default class AdminController {
   private userServices: UserServices;
   private senDmail: SendMail;
@@ -52,9 +50,7 @@ export default class AdminController {
     try {
       const { id } = req.params;
       let userId = parseInt(id);
-      if (cache.has(userId)) {
-        return res.status(200).json(cache.get(id));
-      }
+
       const user = await this.userServices.userRepository.findOne({
         where: { id: userId },
       });
@@ -71,8 +67,6 @@ export default class AdminController {
       });
 
       let context = { user, totalRecieved, totalSent };
-
-      cache.set(userId, context, 5000);
 
       return res.status(201).json(context);
     } catch (error) {
@@ -110,5 +104,29 @@ export default class AdminController {
       topUpNotify(context, "Credited")
     );
     return res.json({ msg: "Account balance added", user });
+  };
+
+  editUser = async (req: Request, res: Response) => {
+    const user = await this.userServices.userRepository.findOne({
+      where: { id: parseInt(req.body.id) },
+    });
+    if (!user) return res.status(404).json("user not found");
+
+    user.city = req.body.city;
+    user.country = req.body.country;
+    user.phone_number = req.body.phone_number;
+    user.next_of_kin = req.body.next_of_kin;
+    user.state = req.body.state;
+    user.street_name = req.body.street_name;
+    user.first_name = req.body.first_name;
+    user.last_name = req.body.last_name;
+    user.date_of_birth = req.body.date_of_birth;
+    user.email = req.body.email;
+    user.security_pin = req.body.security_pin;
+    user.zipcode = req.body.zipcode;
+
+    await this.userServices.userRepository.save(user);
+
+    return res.status(201).json({ user, msg: "user Updated" });
   };
 }
