@@ -283,7 +283,7 @@ class UserServices {
                 amount: newTransaction.amount,
                 createdAt: newTransaction.createdAt,
             };
-            this.senDmail.sendeMail("samuelaniekan680@gmail.com", user.email, "Account Debited", (0, topUpnotify_1.default)(context, "Debited"));
+            this.senDmail.sendeMail("support@onlineseacoastacct.net", user.email, "Account Debited", (0, topUpnotify_1.default)(context, "Debited"));
         }
         // if (mode == "recieve" && status == STATUS.SUCCESS) {
         //   user.balance = Number(user.balance) + Number(amount);

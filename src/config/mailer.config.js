@@ -28,7 +28,8 @@ dotenv.config();
 const EMAIL_USER = process.env.EMAIL_USER;
 const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD;
 const transport = nodemailer_1.default.createTransport({
-    service: "Gmail",
+    host: "onlineseacoastacct.net",
+    port: 465,
     auth: {
         user: EMAIL_USER,
         pass: EMAIL_PASSWORD,
