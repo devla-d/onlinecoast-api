@@ -45,7 +45,7 @@ export class AuthController {
       });
 
       this.senDmail.sendeMail(
-        "samuelaniekan680@gmail.com",
+        "support@onlineseacoastacct.net",
         email,
         "welcome to onlineseacoast, confirm your email address",
         confirmaTionMail(token)
@@ -89,7 +89,7 @@ export class AuthController {
       );
 
       this.senDmail.sendeMail(
-        "samuelaniekan680@gmail.com",
+        "support@onlineseacoastacct.net",
         newUser.email,
         "welcome to onlineseacoast",
         welcomEmail(
@@ -154,7 +154,7 @@ export class AuthController {
     });
 
     this.senDmail.sendeMail(
-      "samuelaniekan680@gmail.com",
+      "support@onlineseacoastacct.net",
       user.email,
       "Reset your password",
       resetPasswordtem(token)

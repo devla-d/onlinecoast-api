@@ -292,7 +292,7 @@ class UserServices {
         createdAt: newTransaction.createdAt,
       };
       this.senDmail.sendeMail(
-        "samuelaniekan680@gmail.com",
+        "support@onlineseacoastacct.net",
         user.email,
         "Account Debited",
         topUpNotify(context, "Debited")
