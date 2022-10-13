@@ -14,7 +14,7 @@ const welcomeEmail_1 = require("../services/welcomeEmail");
 const resetPassword_1 = require("../services/resetPassword");
 require("dotenv/config");
 const SRC_DIR = path_1.default.join(__dirname, "..");
-const MEDIAPATH = path_1.default.join(SRC_DIR, "public/media");
+const MEDIAPATH = path_1.default.join("../../public/media");
 const SECRET_KEY = process.env.SECRET_KEY;
 const REFRESH_TOKEN_PRIVATE_KEY = process.env
     .REFRESH_TOKEN_PRIVATE_KEY;

@@ -42,7 +42,7 @@ const corsOptions = {
 app.use((0, cors_1.default)(corsOptions));
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));
-app.use(express_1.default.static(path_1.default.join(__dirname, "/public")));
+app.use(express_1.default.static(path_1.default.join(__dirname, "../public")));
 app.use((0, morgan_1.default)("tiny"));
 app.use((0, express_fileupload_1.default)());
 const APPKEY = process.env.APPKEY;
