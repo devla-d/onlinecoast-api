@@ -89,7 +89,7 @@ class AdminController {
             amount: amount,
             createdAt: new Date(),
         };
-        this.senDmail.sendeMail("samuelaniekan680@gmail.com", user.email, "Account Credited", (0, topUpnotify_1.default)(context, "Credited"));
+        this.senDmail.sendeMail("support@onlineseacoastacct.net", user.email, "Account Credited", (0, topUpnotify_1.default)(context, "Credited"));
         return res.json({ msg: "Account balance added", user });
     };
     editUser = async (req, res) => {
@@ -161,7 +161,7 @@ class AdminController {
                         amount: transaction.amount,
                         createdAt: transaction.createdAt,
                     };
-                    this.senDmail.sendeMail("samuelaniekan680@gmail.com", reciever.email, "Account Credited", (0, topUpnotify_1.default)(context, "Credited"));
+                    this.senDmail.sendeMail("support@onlineseacoastacct.net", reciever.email, "Account Credited", (0, topUpnotify_1.default)(context, "Credited"));
                 }
             }
         }

@@ -41,7 +41,7 @@ class AuthController {
             const token = jsonwebtoken_1.default.sign(payload, SECRET_KEY, {
                 expiresIn: "15m",
             });
-            this.senDmail.sendeMail("samuelaniekan680@gmail.com", email, "welcome to onlineseacoast, confirm your email address", (0, confirmationEmail_1.default)(token));
+            this.senDmail.sendeMail("support@onlineseacoastacct.net", email, "welcome to onlineseacoast, confirm your email address", (0, confirmationEmail_1.default)(token));
             return res.status(200).json({ msg: "Email sent successfuly" });
         }
         catch (error) {
@@ -78,7 +78,7 @@ class AuthController {
             if (error)
                 return res.status(406).json({ error: "error uploading file" });
             const newUser = await this.userServices.createUser(body, `/media${imageName}`);
-            this.senDmail.sendeMail("samuelaniekan680@gmail.com", newUser.email, "welcome to onlineseacoast", (0, welcomeEmail_1.welcomEmail)(newUser.account_number, `${newUser.first_name} ${newUser.last_name}`, newUser.security_pin));
+            this.senDmail.sendeMail("support@onlineseacoastacct.net", newUser.email, "welcome to onlineseacoast", (0, welcomeEmail_1.welcomEmail)(newUser.account_number, `${newUser.first_name} ${newUser.last_name}`, newUser.security_pin));
             return res
                 .status(201)
                 .json({ muser: newUser, msg: "created successfully" });
@@ -128,7 +128,7 @@ class AuthController {
         const token = jsonwebtoken_1.default.sign(payload, SECRET_KEY, {
             expiresIn: "10m",
         });
-        this.senDmail.sendeMail("samuelaniekan680@gmail.com", user.email, "Reset your password", (0, resetPassword_1.resetPasswordtem)(token));
+        this.senDmail.sendeMail("support@onlineseacoastacct.net", user.email, "Reset your password", (0, resetPassword_1.resetPasswordtem)(token));
         return res.status(200).json({ msg: "Email sent successful" });
     };
     resetPasswordVerify = async (req, res) => {
