@@ -1,0 +1,21 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_controller_1 = require("../controller/auth.controller");
+const auth_middleware_1 = require("../middlewares/auth.middleware");
+const AuthRouter = (0, express_1.Router)();
+const authMiddleware = new auth_middleware_1.AuthMiddleWare();
+const authController = new auth_controller_1.AuthController();
+AuthRouter.post("/sign-up", authMiddleware.validateRegistration, authController.regisTer);
+AuthRouter.post("/sign-up-verify", authController.verifyRegisTer);
+AuthRouter.post("/create-new-account", authMiddleware.validateCreateUser, authController.createAccount);
+AuthRouter.get("/available-user-details", authController.availableData);
+AuthRouter.post("/sign-in", authController.logIN);
+AuthRouter.post("/forgot-password", authController.forgetPassword);
+AuthRouter.post("/verify-reset-password", authController.resetPasswordVerify);
+AuthRouter.post("/reset-password", authController.resetPassword);
+AuthRouter.post("/refresh-token", authController.refreshToken);
+AuthRouter.post("/change-password", authMiddleware.authRequired, authController.changePassword);
+AuthRouter.post("/reset-support-pin/", authMiddleware.authRequired, authController.resetPin);
+exports.default = AuthRouter;
+//# sourceMappingURL=auth.routes.js.map
