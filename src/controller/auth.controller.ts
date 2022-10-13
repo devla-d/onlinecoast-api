@@ -9,10 +9,9 @@ import path from "path";
 import { welcomEmail } from "../services/welcomeEmail";
 import { resetPasswordtem } from "../services/resetPassword";
 import "dotenv/config";
-import { CustomError } from "../services/error.service";
 
 const SRC_DIR = path.join(__dirname, "..");
-const MEDIAPATH = path.join(SRC_DIR, "public/media");
+const MEDIAPATH = path.join("../../public/media");
 
 const SECRET_KEY = process.env.SECRET_KEY as Secret;
 const REFRESH_TOKEN_PRIVATE_KEY: Secret = process.env
