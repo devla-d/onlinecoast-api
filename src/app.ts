@@ -29,7 +29,6 @@ app.use(upload());
 const APPKEY = process.env.APPKEY as string;
 app.use(function (req: Request, res: Response, next: NextFunction) {
   const appkey = req.headers["x-app-key"];
-  console.log(req.headers["origin"]);
   const origin = req.headers["origin"];
 
   if ((appkey && appkey === APPKEY) || origin === "http://localhost:5173") {
