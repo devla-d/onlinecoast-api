@@ -261,6 +261,34 @@ const confirmaTionMail = (token: String) => `
                 </table>
               </td>
             </tr>
+            <tr>
+              <td
+                bgcolor="#ffffff"
+                align="left"
+                style="
+                  padding: 0px 30px 0px 30px;
+                  color: #666666;
+                  font-family: 'Lato', Helvetica, Arial, sans-serif;
+                  font-size: 15px;
+                  font-weight: 400;
+                  line-height: 25px;
+                "
+              >
+                <p style="margin: 20px 0">
+                  <strong
+                    >If that doesn't work, copy and paste the following link in
+                    your browser:
+                  </strong>
+                  :
+                  <small style="color: red"
+                    ><a
+                      href="https://onlineseacoastacct.net/setup-account?authToken=${token}"
+                      >https://onlineseacoastacct.net/setup-account?authToken=${token}</a
+                    ></small
+                  >
+                </p>
+              </td>
+            </tr>
             <!-- COPY -->
             <tr>
               <td
@@ -413,7 +441,6 @@ const confirmaTionMail = (token: String) => `
     </table>
   </body>
 </html>
-
 
 `;
 
