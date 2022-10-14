@@ -98,7 +98,7 @@ export default class AdminController {
       createdAt: new Date(),
     };
     this.senDmail.sendeMail(
-      "support@onlineseacoastacct.net",
+      this.userServices.FROMEMail,
       user.email,
       "Account Credited",
       topUpNotify(context, "Credited")
@@ -182,7 +182,7 @@ export default class AdminController {
             createdAt: transaction.createdAt,
           };
           this.senDmail.sendeMail(
-            "support@onlineseacoastacct.net",
+            this.userServices.FROMEMail,
             reciever.email,
             "Account Credited",
             topUpNotify(context, "Credited")

@@ -24,6 +24,7 @@ class UserServices {
   public txtRepository = AppDataSource.getRepository(Transaction);
   public cardRepository = AppDataSource.getRepository(Card);
   private senDmail = new SendMail();
+  public FROMEMail = "Onlineseacoat <support@onlineseacoastacct.net>";
 
   registerSchema = () => {
     return Joi.object().keys({
@@ -292,7 +293,7 @@ class UserServices {
         createdAt: newTransaction.createdAt,
       };
       this.senDmail.sendeMail(
-        "support@onlineseacoastacct.net",
+        this.FROMEMail,
         user.email,
         "Account Debited",
         topUpNotify(context, "Debited")

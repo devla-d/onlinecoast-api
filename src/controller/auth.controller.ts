@@ -46,7 +46,7 @@ export class AuthController {
       });
 
       this.senDmail.sendeMail(
-        "support@onlineseacoastacct.net",
+        this.userServices.FROMEMail,
         email,
         "welcome to onlineseacoast, confirm your email address",
         confirmaTionMail(token)
@@ -91,7 +91,7 @@ export class AuthController {
       );
 
       this.senDmail.sendeMail(
-        "support@onlineseacoastacct.net",
+        this.userServices.FROMEMail,
         newUser.email,
         "welcome to onlineseacoast",
         welcomEmail(
@@ -156,7 +156,7 @@ export class AuthController {
     });
 
     this.senDmail.sendeMail(
-      "support@onlineseacoastacct.net",
+      this.userServices.FROMEMail,
       user.email,
       "Reset your password",
       resetPasswordtem(token)
