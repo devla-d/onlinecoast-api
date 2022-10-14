@@ -18,9 +18,10 @@ const App = http.createServer(app);
 const corsOptions = {
   origin: [
     "http://localhost:5173",
-    "//onlineseacoastacct.net",
-    "//www.onlineseacoastacct.net",
+    "https//onlineseacoastacct.net",
+    "http//www.onlineseacoastacct.net",
   ],
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
