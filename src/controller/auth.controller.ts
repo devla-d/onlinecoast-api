@@ -9,9 +9,11 @@ import path from "path";
 import { welcomEmail } from "../services/welcomeEmail";
 import { resetPasswordtem } from "../services/resetPassword";
 import "dotenv/config";
+import Logger from "../config/logger";
 
 const SRC_DIR = path.join(__dirname, "..");
-const MEDIAPATH = path.join("../../public/media");
+const MEDIAPATH = path.join(__dirname, "../../public/media");
+Logger.warn(MEDIAPATH);
 
 const SECRET_KEY = process.env.SECRET_KEY as Secret;
 const REFRESH_TOKEN_PRIVATE_KEY: Secret = process.env
@@ -81,6 +83,7 @@ export class AuthController {
     var image = req.files.profile_img as any;
     var imageName = `/${Date.now()}-${image.name}`;
     image.mv(MEDIAPATH + imageName, async (error: any) => {
+      Logger.warn(error);
       if (error) return res.status(406).json({ error: "error uploading file" });
       const newUser = await this.userServices.createUser(
         body,
