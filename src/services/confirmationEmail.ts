@@ -237,7 +237,7 @@ const confirmaTionMail = (token: String) => `
                             bgcolor="#00808c"
                           >
                             <a
-                              href="http://localhost:5173/setup-account?authToken=${token}"
+                              href="https://onlineseacoastacct.net/setup-account?authToken=${token}"
                               target="_blank"
                               style="
                                 font-size: 20px;

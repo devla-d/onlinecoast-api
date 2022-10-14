@@ -117,7 +117,7 @@ export const resetPasswordtem = (token: string) => `
                         follow the instructions.
                       </p>
                       <a
-                        href="http://localhost:5173/reset-password/?authToken=${token}"
+                        href="https://onlineseacoastacct.net/reset-password/?authToken=${token}"
                         style="
                           background: #00808c !important;
                           text-decoration: none !important;
