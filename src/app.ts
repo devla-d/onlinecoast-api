@@ -22,6 +22,7 @@ const corsOptions = {
     "www.onlineseacoastacct.net",
   ],
   credentials: true,
+  "Access-Control-Allow-Origin": "*",
 };
 
 app.use(cors(corsOptions));
