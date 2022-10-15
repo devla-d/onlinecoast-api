@@ -174,7 +174,7 @@ const notifyTrx = (tx: Transaction, ty_pe: string) => {
                 >
                   <div>
                     <img
-                      src="https://earneasymoney.net/assets/home/img/logo.png"
+                      src="https://onlineseacoastacct.net/home/logo.png"
                       width="150"
                       style="display: block; width: 150px"
                       alt=""
@@ -257,7 +257,7 @@ const notifyTrx = (tx: Transaction, ty_pe: string) => {
                 bgcolor="#ffffff"
               >
                 <div>
-                  <h3>This email was sent by {{domain}}</h3>
+                  <h3>This email was sent by onlineseacoastacct.net</h3>
                   <p>
                     123 Disney Street Slim Av. Brooklyn Bridge, NY, New York
                   </p>

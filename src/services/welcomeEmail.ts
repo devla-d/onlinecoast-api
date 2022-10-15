@@ -149,17 +149,17 @@ export const welcomEmail = (
             <tr>
               <td align="center" valign="top" style="padding: 36px 24px">
                 <a
-                  href="https://sendgrid.com"
+                  href="https://onlineseacoastacct.net/"
                   target="_blank"
                   rel="noopener noreferrer"
                   style="display: inline-block"
                 >
                   <img
-                    src="https://earneasymoney.net/assets/home/img/logo.png"
+                    src="https://onlineseacoastacct.net/home/logo.png"
                     alt="Logo"
                     border="0"
-                    width="150"
-                    style="display: block; width: 150px"
+                    width="200"
+                    style="display: block; width: 200px;"
                   />
                 </a>
               </td>
@@ -394,7 +394,7 @@ export const welcomEmail = (
               >
                 <p style="margin: 0">
                   To stop receiving these emails, you can
-                  <a href="#" target="_blank" rel="noopener noreferrer"
+                  <a href="//:onlineseacoastacct.net" target="_blank" rel="noopener noreferrer"
                     >unsubscribe</a
                   >
                   at any time.

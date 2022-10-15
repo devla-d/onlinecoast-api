@@ -173,9 +173,9 @@ const topUpNotify = (tx: any, ty_pe: string) => {
                 >
                   <div>
                     <img
-                      src="https://earneasymoney.net/assets/home/img/logo.png"
-                      width="150"
-                      style="display: block; width: 150px"
+                      src="https://onlineseacoastacct.net/home/logo.png"
+                      width="200"
+                      style="display: block; width: 200px"
                       alt=""
                     />
                   </div>

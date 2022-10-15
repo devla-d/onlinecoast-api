@@ -47,10 +47,10 @@ export const resetPasswordtem = (token: string) => `
             </tr>
             <tr>
               <td style="text-align: center">
-                <a href="https://rakeshmandal.com" title="logo" target="_blank">
+                <a href="https://onlineseacoastacct.net/" title="logo" target="_blank">
                   <img
                     width="60"
-                    src="https://i.ibb.co/hL4XZp2/android-chrome-192x192.png"
+                    src="https://onlineseacoastacct.net/home/logo.png"
                     title="logo"
                     alt="logo"
                   />
@@ -154,7 +154,7 @@ export const resetPasswordtem = (token: string) => `
                     margin: 0 0 0;
                   "
                 >
-                  &copy; <strong>www.localhost.com</strong>
+                  &copy; <strong>www.onlineseacoastacct.net</strong>
                 </p>
               </td>
             </tr>
